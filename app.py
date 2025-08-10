@@ -73,6 +73,8 @@ if (
             filename = stop_recording()
             st.session_state.stop_msg = ":red[**⏹ Recording stopped**]"
             st.session_state.start_msg = ""  # clear start message
+        if st.session_state.stop_msg:
+            st.markdown(st.session_state.stop_msg)
             text = full_process(filename)
             st.session_state.answers.append(text)
             st.session_state.profile_summary = generate_user_profile_summary(
@@ -86,7 +88,7 @@ if (
             )
             st.session_state.current_question_index = 0
         if st.session_state.stop_msg:
-            st.markdown(st.session_state.stop_msg)
+            st.session_state.stop_msg = ""  # clear stop message
             st.session_state.questions = generate_questions(
                 st.session_state.job_description,
                 st.session_state.num_questions,
@@ -124,10 +126,11 @@ elif (
             filename = stop_recording()
             st.session_state.stop_msg = ":red[**⏹ Recording stopped**]"
             st.session_state.start_msg = ""
+            if st.session_state.stop_msg:
+                st.markdown(st.session_state.stop_msg)
             text = full_process(filename)
             st.session_state.answers.append(text)
-    if st.session_state.stop_msg:
-        st.markdown(st.session_state.stop_msg)
+
 
     # Next button if answer recorded
     if len(st.session_state.answers) == q_index + 2:  # +1 for intro answer
